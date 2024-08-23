@@ -29,7 +29,7 @@ if (navigator.geolocation) {
 }
 
 //now rendering location from leaflet map basically asking google for accessing the location
-const map = L.map("map").setView([0, 0], 5);
+const map = L.map("map").setView([0, 0], 15);
 
 // now to see the actual map we need to write this comman with url learn this
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
@@ -62,4 +62,35 @@ socket.on("user-disconnected", (id) => {
     map.removeLayer(markers[id]);
     delete markers[id];
   }
+});
+
+socket.on("geofence-alert", (data) => {
+  alert(data.message);
+});
+
+//chat
+const messageInput = document.getElementById("message");
+const sendButton = document.getElementById("send");
+const output = document.getElementById("output");
+const feedback = document.getElementById("feedback");
+
+sendButton.addEventListener("click", () => {
+  socket.emit("chat-message", {
+    message: messageInput.value,
+    username: username,
+  });
+  messageInput.value = "";
+});
+
+socket.on("chat-message", (data) => {
+  feedback.innerHTML = "";
+  output.innerHTML += `<p><strong>${data.username}:</strong> ${data.message}</p>`;
+});
+
+messageInput.addEventListener("keypress", () => {
+  socket.emit("typing", username);
+});
+
+socket.on("typing", (data) => {
+  feedback.innerHTML = `<p><em>${data} is typing...</em></p>`;
 });
