@@ -58,12 +58,12 @@ io.on("connection", function (socket) {
           message: `You have entered the ${geofence.name} area.`,
           geofenceId: geofence.id,
         });
-      } else {
-        socket.emit("geofence-alert", {
-          message: `You have exited the ${geofence.name} area.`,
-          geofenceId: geofence.id,
-        });
-      }
+      } //  else {
+      //   socket.emit("geofence-alert", {
+      //     // message: `You have exited the ${geofence.name} area.`,
+      //     geofenceId: geofence.id,
+      //   });
+      // }
     });
 
     //emit the location to all connected clients send the req to frontend
